@@ -11,10 +11,12 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private ImageView gambar1, gambar2, gambar3;
+    private ImageView gambar1, gambar2, gambar3, sensational;
     private Thread thread;
     private Handler handler;
     private int slot = 0;
+
+    private boolean isWinning = false;
 
 
     @Override
@@ -23,6 +25,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         findViewById(R.id.btStartStop).setOnClickListener(this);
+
+        this.sensational = findViewById(R.id.SENSATIONAL);
 
         this.gambar1 = (ImageView) findViewById(R.id.gambar1);
         this.gambar2 = (ImageView) findViewById(R.id.gambar2);
@@ -56,9 +60,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             public void run() {
                                 gambar1.setImageDrawable(getDrawable(images[finalGambar[0]]));
                                 gambar2.setImageDrawable(getDrawable(images[finalGambar[1]]));
-                                gambar3.setImageDrawable(getDrawable(images[finalGambar[2]]));}
+                                gambar3.setImageDrawable(getDrawable(images[finalGambar[2]]));
+
+                                if (finalGambar[0] == finalGambar[1] && finalGambar[1] == finalGambar[2]) {
+                                    isWinning = true;
+                                } else {
+                                    isWinning = false;
+                                }
+                            }
                         });
-                        Thread.sleep(500);
+                        Thread.sleep(900);
                     }
                 } catch (Exception e) {}
             }
@@ -77,5 +88,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             this.createThread();
             this.thread.start();
         }
+
+        if(isWinning) {
+            sensational.setVisibility(View.VISIBLE);
+            isWinning = false;
+        } else {
+            sensational.setVisibility(View.INVISIBLE);
+        }
+
     }
 }
